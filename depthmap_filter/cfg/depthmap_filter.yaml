@@ -1,0 +1,36 @@
+# depthmap_filter params.
+
+# Node id.
+node_id: 36
+
+# Rate of heart_beat.
+heart_beat_dt: 0.5
+
+# Alarm/fail timeout lengths.
+alarm_timeout: 0.5
+fail_timeout: 2.0
+
+# Process one out of this many images.
+downsample_factor: 1
+
+# 1. Maximum depth gradient.
+do_gradient_filter: false  #was true
+max_grad_mag: 0.03
+
+# 2. Saturation filter.
+do_saturation_filter: false
+saturation_thresh: 253
+
+# 3. Morphological filter params. Morphological transformation are explained in https://docs.opencv.org/3.4/d9/d61/tutorial_py_morphological_ops.html
+morph:
+  do_open: false  #was true
+  open_size: 7
+  do_close: false
+  close_size: 5
+
+# 4. Maximum depth threshold.
+max_depth: 10.0  # [m]
+min_depth: 0.01  # [m]
+
+# 4. Downsample image resolution
+pyramid_level: 1  # was 2: halve resolution this many times

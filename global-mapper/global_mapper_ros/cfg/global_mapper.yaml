@@ -1,0 +1,37 @@
+global_frame: world
+origin: [0.0, 0.0, 0.0]  # [m]
+world_dimensions: [20.0, 20.0, 4.0]  # [m]  16   16   4
+resolution: 0.15  # [m]   0.15
+radius_drone: 1.0 # [m] This should be higher than the resolutions
+Ra: 4.0 # [m] radius of the first sphere (Sa) in the planner. The unknown pcloud published will only contain points inside this sphere
+z_ground: 0.1 #[m] points below z_ground are not published in the known grid
+skip: 0  #[pixels] Numbers of pixels to skip in the depth map. Should be >=0
+depth_max: 5.0 #[m] In the depth image, points farther than depth_max, are treated as inf (i.e. along its ray (and up to that point) only unknown voxels are cleared. If doing simulation, this should be the value of pointCloudCutoffMax in the file `asus_camera_urdf.xacro`
+r1: 0.8 #[m] Points in the sphere centerd in the drone with r>r1 and r<r2 are published as unkown space
+r2: 8.0 #[m] See above
+z_min_unknown: 0.1 #[m] points below z_min_unkown are not published in the unkown grid
+z_max_unknown: 5 #[m] points above z_max_unkown are not published in the unkown grid
+
+
+occupancy_grid:
+  init_value: -1.0
+  hit_inc: 0.4 #Was 0.4  
+  miss_inc: -0.01
+  occupancy_threshold: 0.6  # [0.0, 1.0]
+  publish_occupancy_grid: true
+  publish_unknown_grid: true
+  clear_unknown_distance: 5.0  # [m]  #Nan ¿and inf? --> Clear the unkown voxels up to this distance
+
+distance_grid:
+  truncation_distance: 6  # [voxels]
+  publish_distance_grid: false
+
+cost_grid:
+  publish_cost_grid: false
+  publish_path: false
+  inflation_distance: 4  # inflate obstacles by this many squared voxels
+  altitude_weight: 20
+  inflation_weight: 0
+  unknown_weight: 20
+  obstacle_weight: 10000
+  target_altitude: 2  # target altitude [m]

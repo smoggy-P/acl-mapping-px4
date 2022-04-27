@@ -1,0 +1,50 @@
+<launch>
+  <arg name="veh" default="$(optenv VEHTYPE SQ)" />
+  <arg name="num" default="$(optenv VEHNUM 01)" />
+  <arg name="uav_name" default="$(arg veh)$(arg num)"/>
+
+  <arg name="use_state_estimate" default="false"/>
+
+  <!-- Stereo processing nodelet -->
+  <group ns="/$(arg uav_name)">
+    <arg name="manager_name" value="perception_manager"/>
+    <arg name="manager_fullname" value="/$(arg uav_name)/$(arg manager_name)"/>
+
+    <!-- Load nodelet manager -->
+    <node pkg="nodelet" type="nodelet" name="$(arg manager_name)"  args="manager" output="screen">
+    </node>
+
+    <group ns="camera">
+      <!-- Disparity processing -->
+      <node name="stereo_image_proc_disparity" pkg="nodelet" type="nodelet"
+          args="load stereo_image_proc/disparity $(arg manager_fullname)" output="screen">
+        <remap from="left/image_rect" to="left/image_rect_color" />
+        <remap from="right/image_rect" to="right/image_rect_color" />
+      </node>
+
+      <node name="stereo_image_proc_cloud" pkg="nodelet" type="nodelet"
+          args="load stereo_image_proc/point_cloud2 $(arg manager_fullname)" output="screen">
+      </node>
+
+      <!-- Uses non-standard disparity_image_proc package to produce depth image -->
+      <node name="stereo_image_proc_depth" pkg="nodelet" type="nodelet"
+          args="load disparity_image_proc/depth_image $(arg manager_fullname)" output="screen">
+      </node>
+    </group>
+
+    <!-- Would be nice to run in nodelet but that seems broken -->
+    <node pkg="global_mapper_ros" type="global_mapper_node" name="global_mapper_ros" output="log">
+      <!-- params -->
+      <rosparam command="load" file="$(find global_mapper_ros)/cfg/flightgoggles.yaml"/>
+
+      <!-- input remaps -->
+      <remap from="~depth_image_topic" to="camera/depth_image" />
+      <remap from="~goal_topic" to="/move_base_simple/goal" />
+      <remap from="~pose_topic" to="state" />
+      <remap from="camera/camera_info" to="camera/left/camera_info"/>
+      <remap from="~occupancy_grid_topic" to="occupancy_grid"/>
+      <remap from="~unknown_grid_topic" to="unknown_grid"/>
+    </node>
+  </group>
+
+</launch>

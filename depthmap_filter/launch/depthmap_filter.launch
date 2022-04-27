@@ -1,0 +1,40 @@
+<launch>
+
+  <!-- name of the quad -->
+  <arg name="quad" default="SQ01s"/>
+
+  <arg name="load_params" default="true" />
+  <arg name="param_file" default="depthmap_filter.yaml" />
+
+  <arg name="manager" default="my_manager" />
+  <arg name="standalone" default="true" />
+
+  <!-- Subscribed topics. -->
+  <arg name="input_rgb" default="camera/rgb/image_raw" />
+  <arg name="input_depthmap" default="camera/depth/image_raw" />
+  <arg name="input_camera_info" default="camera/rgb/camera_info" />
+
+  <!-- Published topics. -->
+  <arg name="status" default="status" />
+  <arg name="event" default="event" />
+
+  <!-- Launch the nodelet manager. 
+  <node if="$(arg standalone)"
+        ns="$(arg quad)" pkg="nodelet" type="nodelet" name="$(arg manager)" output="screen"
+        args="manager"/> -->
+
+  <!-- Launch the DepthmapFilter nodelet.. -->
+  <node ns="$(arg quad)" pkg="nodelet" type="nodelet" name="depthmap_filter_nodelet"
+        args="load depthmap_filter/DepthmapFilter
+              $(arg manager)">
+    <rosparam command="load" if="$(arg load_params)" file="$(find depthmap_filter)/cfg/$(arg param_file)" />
+    
+    <remap from="rgb" to="$(arg input_rgb)" />
+    <remap from="depth" to="$(arg input_depthmap)" />
+    <remap from="camera_info" to="$(arg input_camera_info)" />
+
+    <remap from="depth_filtered" to="depthmap_filter/depth_filt" />
+    <remap from="status" to="$(arg status)" />
+    <remap from="event" to="$(arg event)" />
+  </node>
+</launch>

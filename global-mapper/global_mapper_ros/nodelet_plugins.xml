@@ -1,0 +1,8 @@
+<library path="lib/libglobal_mapper_nodelet">
+  <class name="global_mapper_ros/GlobalMapperNodelet"
+         type="global_mapper_ros::GlobalMapperNodelet" base_class_type="nodelet::Nodelet">
+    <description>
+	    A global mapping package for ros.
+    </description>
+  </class>
+</library>
