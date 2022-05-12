@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.2)
 
 # Configure CCache if available
 find_program(CCACHE_FOUND ccache)
@@ -11,7 +11,7 @@ project(global_mapper_ros)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE)
 
-add_definitions("-std=c++11")
+add_definitions("-std=c++14")
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
