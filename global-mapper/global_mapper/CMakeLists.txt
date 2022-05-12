@@ -18,7 +18,7 @@ option(BUILD_DOCUMENTATION "Use Doxygen to create the HTML based API documentati
 option(BUILD_TESTS "Use GTest to build and test libraries" OFF)
 
 # Definitions
-add_definitions("-std=c++11")
+add_definitions("-std=c++14")
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
