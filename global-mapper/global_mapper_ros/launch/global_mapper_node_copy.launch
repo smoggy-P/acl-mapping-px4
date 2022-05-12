@@ -46,4 +46,7 @@
       <remap from="~path_topic" to="$(arg path_topic)" />
       <remap from="~sparse_path_topic" to="$(arg sparse_path_topic)" />
   </node>
+
+  <!-- RVIZ -->
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find global_mapper_ros)/rviz/default.rviz" />
 </launch>
